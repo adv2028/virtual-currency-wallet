@@ -1,8 +1,8 @@
 function App() {
   return (
-    <>
+    <h1 className="text-3xl font-bold">
       Cartera Virtual de Divisas
-    </>
+    </h1>
   )
 }
 
