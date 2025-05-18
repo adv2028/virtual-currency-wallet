@@ -1,10 +1,6 @@
 import Select, { type MultiValue, type OnChangeValue } from 'react-select'
 import makeAnimated from 'react-select/animated';
-
-type Option = {
-  value: string;
-  label: string;
-}
+import type { Option } from '../types/types';
 
 type Props = {
   placeholder?: string,
