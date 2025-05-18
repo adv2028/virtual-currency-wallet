@@ -1,39 +1,20 @@
-import { useEffect, useState } from "react"
-import { coinbaseApi } from "../config/axios"
 import { useStore } from "../stores/use-store";
 import { formatCurrency } from "../utils/format-currency";
-
-type CurrencyAPI = {
-  currency: string;
-  rates: { [key: string]: string };
-}
+import { useLoaderData } from "react-router";
 
 export const Result = () => {
-  const [rates, setRates] = useState<Record<string, string>>()
-
+  const { rates } = useLoaderData();
   const balance = useStore(state => state.balance)
   const selectedCurrencies = useStore(state => state.selectedCurrencies)
-
   const formattedBalance = formatCurrency({ value: balance, currency: "EUR", locale: "es-ES" })
-
-  const getRates = async () => {
-    const response = await coinbaseApi.get("/exchange-rates?currency=EUR")
-    const data: CurrencyAPI = response?.data.data
-
-    setRates(data.rates)
-  }
 
   const calculateExchangeValue = (currency: string) => {
     if (!rates) return
     const rate = parseInt(rates[currency])
     const exchange = rate * balance
 
-    return formatCurrency({ value: exchange, currency, options: { currencySign: "accounting"} })
+    return formatCurrency({ value: exchange, currency, options: { currencySign: "accounting" } })
   }
-
-  useEffect(() => {
-    getRates()
-  }, [])
 
   return (
     <section>
