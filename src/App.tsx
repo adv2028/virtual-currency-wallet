@@ -1,22 +1,20 @@
-import { useEffect } from "react"
-import { coinbaseApi } from "./config/axios"
+import { Outlet, useNavigation } from "react-router"
 
 function App() {
-
-  const onGetRates = async () => {
-    const response = await coinbaseApi.get("/exchange-rates?currency=USD")
-
-    return response
-  }
-
-  useEffect(() => {
-    onGetRates()
-  }, [])
+  const navigation = useNavigation();
 
   return (
-    <h1 className="text-3xl font-bold">
-      Cartera Virtual de Divisas
-    </h1>
+    <section className="flex flex-col items-center py-5">
+      <h1 className="text-3xl font-bold">
+        Virtual currency wallet
+      </h1>
+      {
+        navigation.state !== "idle" && <>Cargandooooo</>
+      }
+      {
+        navigation.state === "idle" && <Outlet />
+      }
+    </section>
   )
 }
 
