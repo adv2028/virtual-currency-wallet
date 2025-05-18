@@ -1,8 +1,13 @@
-import { useEffect, useState, type ChangeEvent } from "react"
+import { useEffect, useState } from "react"
 import { coinbaseApi } from "../config/axios"
-import Select, { type OnChangeValue } from 'react-select'
-import makeAnimated from 'react-select/animated';
-import { useNavigation, Form, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import { CurrencySelector } from "../components/currency-selector";
+import { Button } from "../components/button";
+import { BalanceInput } from "../components/balance-input";
+import type { OnChangeValue } from "react-select";
+import type { CurrencyInputOnChangeValues } from 'react-currency-input-field';
+import { useStore } from "../stores/use-store";
+import { toast } from 'sonner';
 
 type FiatCurrency = {
   id: string;
@@ -10,69 +15,57 @@ type FiatCurrency = {
   min_size: string;
 }
 
-type SelectOption = {
+type Option = {
   value: string;
   label: string;
 }
 
-type CurrencyAPI = {
-  currency: string;
-  rates: { [key: string]: string };
-}
-
-const animatedComponents = makeAnimated();
-
 export const Home = () => {
   const navigate = useNavigate();
-  const [balance, setBalance] = useState('');
-  const [rates, setRates] = useState<Record<string, string>>()
-  const [fiatCurrencies, setFiatCurrencies] = useState<SelectOption[]>([])
-  const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>()
+  const [fiatCurrencies, setFiatCurrencies] = useState<Option[]>([])
+
+  const balance = useStore(state => state.balance)
+  const setBalance = useStore(state => state.setBalance)
+
+  const selectedCurrencies = useStore(state => state.selectedCurrencies)
+  const setSelectedCurrencies = useStore(state => state.setSelectedCurrencies)
 
   const getFiatCurrencies = async () => {
     const response = await coinbaseApi.get(`/currencies`)
-    const newFiatCurrencies: SelectOption[] = response?.data.data.map((currency: FiatCurrency) => ({ value: currency.id, label: currency.name }))
+    const newFiatCurrencies: Option[] = response?.data.data.map((currency: FiatCurrency) => ({ value: currency.id, label: currency.name }))
     setFiatCurrencies(newFiatCurrencies)
   }
 
-  const getRates = async () => {
-    const response = await coinbaseApi.get("/exchange-rates?currency=EUR")
-    const data: CurrencyAPI = response?.data.data
-
-    setRates(data.rates)
+  const showToastMaxOptionsSelected = () => {
+    toast.warning('You’ve selected the maximum of 3 allowed currencies.', {
+      closeButton: true
+    })
   }
 
-  const onChange = (newValue: OnChangeValue<any, true>) => {
-    const selectedValues = newValue.map(value => value.value)
-    setSelectedCurrencies(selectedValues)
+  const onChangeCurrencySelector = (value: OnChangeValue<any, true>) => {
+    if (value.length >= 3) showToastMaxOptionsSelected()
+    const slicedValues = value.slice(0, 3);
+    setSelectedCurrencies(slicedValues)
   }
 
-  const onChangeBalance = (e: ChangeEvent<HTMLInputElement>) => {
-    setBalance(e.target.value)
+  const onChangeBalance = (value: string | undefined, name?: string, values?: CurrencyInputOnChangeValues) => {
+    if (!values?.float) return
+    setBalance(values?.float)
+  }
+
+  const onWatchResult = () => {
+    navigate("/resultado")
   }
 
   useEffect(() => {
     getFiatCurrencies()
-    getRates()
   }, [])
+
   return (
-    <>
-      <input value={balance} onChange={onChangeBalance} type="number" step="0.01" required min="0.01" />
-      <Select options={fiatCurrencies} isMulti components={animatedComponents} onChange={onChange} isDisabled={!balance} />
-
-      <button onClick={() => navigate("/resultado")}>Convertir</button>
-      {
-        selectedCurrencies?.map(currency => {
-          const rate = rates?.[currency] ?? "0"
-          const exchangeValue = parseInt(balance) * parseInt(rate)
-
-          return (
-            <div key={currency} className="flex gap-5">
-              <span>{currency}</span>
-              <span>{exchangeValue}</span>
-            </div>)
-        })
-      }
-    </>
+    <div className="flex flex-col gap-5 w-full px-6">
+      <BalanceInput onValueChange={onChangeBalance} defaultValue={balance} />
+      <CurrencySelector placeholder="Select up to 3 currencies" currencies={fiatCurrencies} onChange={onChangeCurrencySelector} defaultValue={selectedCurrencies} value={selectedCurrencies} />
+      <Button title="Show conversion" onClick={onWatchResult} disabled={selectedCurrencies.length < 1 || selectedCurrencies.length > 3} />
+    </div>
   )
 }
