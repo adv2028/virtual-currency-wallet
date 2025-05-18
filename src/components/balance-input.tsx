@@ -10,7 +10,7 @@ export const BalanceInput = ({ onValueChange, defaultValue = 0 }: Props) => {
     <CurrencyInput
       id="balance"
       name="input-balance"
-      placeholder="Ingresa tu balance"
+      placeholder="Enter amount"
       allowNegativeValue={false}
       defaultValue={defaultValue}
       decimalsLimit={2}
@@ -18,7 +18,7 @@ export const BalanceInput = ({ onValueChange, defaultValue = 0 }: Props) => {
       prefix="EUR"
       groupSeparator="."
       decimalSeparator=","
-      className="rounded h-[38px] border border-gray-300 pl-3 focus:outline-[#2684ff]"
+      className="rounded h-[38px] border border-gray-300 pl-3 focus:outline-[#2684ff] placeholder:text-grey-600 w-full"
     />
   )
 }
