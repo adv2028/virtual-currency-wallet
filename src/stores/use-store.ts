@@ -3,8 +3,8 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
 type Option = {
-  value: string;
-  label: string;
+  value: string
+  label: string
 }
 
 type StoreState = {
@@ -24,9 +24,10 @@ export const useStore = create<StoreState & StoreActions>()(
         balance: 0,
         selectedCurrencies: [],
         setBalance: (newBalance) => set(() => ({ balance: newBalance })),
-        setSelectedCurrencies: (newCurrencies) => set(() => ({ selectedCurrencies: newCurrencies })),
+        setSelectedCurrencies: (newCurrencies) =>
+          set(() => ({ selectedCurrencies: newCurrencies })),
       }),
-      { name: 'virtual-currency-wallet-store' },
-    ),
-  ),
+      { name: 'virtual-currency-wallet-store' }
+    )
+  )
 )

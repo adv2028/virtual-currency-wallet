@@ -1,7 +1,13 @@
-import CurrencyInput, { type CurrencyInputOnChangeValues } from 'react-currency-input-field';
+import CurrencyInput, {
+  type CurrencyInputOnChangeValues,
+} from 'react-currency-input-field'
 
 type Props = {
-  onValueChange?: (value: string | undefined, name?: string, values?: CurrencyInputOnChangeValues) => void
+  onValueChange?: (
+    value: string | undefined,
+    name?: string,
+    values?: CurrencyInputOnChangeValues
+  ) => void
   defaultValue?: number
 }
 
