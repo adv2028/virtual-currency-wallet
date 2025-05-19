@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { router } from './routes/app-routes.tsx'
+import { router } from './routes/app-routes'
 import { RouterProvider } from 'react-router'
 import { Toaster } from 'sonner'
 

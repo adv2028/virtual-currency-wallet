@@ -32,8 +32,8 @@ export const Home = () => {
   }
 
   const onChangeBalance = (
-    value: string | undefined,
-    name?: string,
+    _value: string | undefined,
+    _name?: string,
     values?: CurrencyInputOnChangeValues
   ) => {
     if (!values?.float) return
