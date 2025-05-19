@@ -6,6 +6,7 @@ import { useStore } from "../stores/use-store";
 import { toast } from 'sonner';
 import type { OnChangeValue } from "react-select";
 import type { CurrencyInputOnChangeValues } from 'react-currency-input-field';
+import type { Option } from "../types/types";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -23,9 +24,10 @@ export const Home = () => {
     })
   }
 
-  const onChangeCurrencySelector = (value: OnChangeValue<any, true>) => {
-    if (value.length >= 3) showToastMaxOptionsSelected()
-    const slicedValues = value.slice(0, 3);
+  const onChangeCurrencySelector = (value: OnChangeValue<Option, true>) => {
+    const currentSelectedOptions = value || [];
+    if (currentSelectedOptions.length >= 3) showToastMaxOptionsSelected()
+    const slicedValues = currentSelectedOptions.slice(0, 3);
     setSelectedCurrencies(slicedValues)
   }
 
