@@ -11,7 +11,7 @@ type Props = {
   defaultValue?: number
 }
 
-export const BalanceInput = ({ onValueChange, defaultValue = 0 }: Props) => {
+export const BalanceInput = ({ onValueChange, defaultValue }: Props) => {
   return (
     <CurrencyInput
       id="balance"
@@ -21,7 +21,7 @@ export const BalanceInput = ({ onValueChange, defaultValue = 0 }: Props) => {
       defaultValue={defaultValue}
       decimalsLimit={2}
       onValueChange={onValueChange}
-      prefix="EUR"
+      prefix="EUR "
       groupSeparator="."
       decimalSeparator=","
       className="rounded h-[38px] border border-gray-300 pl-3 focus:outline-[#2684ff] placeholder:text-grey-600 w-full"

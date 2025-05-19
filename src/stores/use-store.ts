@@ -8,12 +8,12 @@ type Option = {
 }
 
 type StoreState = {
-  balance: number
+  balance: number | null
   selectedCurrencies: MultiValue<Option>
 }
 
 type StoreActions = {
-  setBalance: (newBalance: number) => void
+  setBalance: (newBalance: number | null) => void
   setSelectedCurrencies: (newCurrencies: MultiValue<Option>) => void
 }
 
@@ -21,7 +21,7 @@ export const useStore = create<StoreState & StoreActions>()(
   devtools(
     persist(
       (set) => ({
-        balance: 0,
+        balance: null,
         selectedCurrencies: [],
         setBalance: (newBalance) => set(() => ({ balance: newBalance })),
         setSelectedCurrencies: (newCurrencies) =>
