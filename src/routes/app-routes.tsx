@@ -21,10 +21,10 @@ export const router = createBrowserRouter([
           const newFiatCurrencies: Option[] = response?.data.data.map((currency: FiatCurrency) => ({ value: currency.id, label: currency.name }))
           return { fiatCurrencies: newFiatCurrencies };
         },
-        errorElement: <div>Could not load currencies 😬</div>
+        errorElement: <div>Could not load currencies</div>
       },
       {
-        path: "/resultado",
+        path: "/result",
         element: <Result />,
 
         loader: async ({ request }) => {
@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
 
           return { rates: data.rates }
         },
-        errorElement: <div>Could not load currencies rates 😬</div>
+        errorElement: <div>Could not load currencies rates</div>
       },
     ]
   },
