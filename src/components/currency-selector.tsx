@@ -7,7 +7,7 @@ type Props = {
   currencies: Option[],
   defaultValue?: MultiValue<Option>,
   value: MultiValue<Option>,
-  onChange: (value: OnChangeValue<any, true>) => void
+  onChange: (value: OnChangeValue<Option, true>) => void
 }
 
 const animatedComponents = makeAnimated();
