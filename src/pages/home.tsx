@@ -35,7 +35,7 @@ export const Home = () => {
   }
 
   const onWatchResult = () => {
-    navigate("/resultado")
+    navigate("/result")
   }
 
   return (
