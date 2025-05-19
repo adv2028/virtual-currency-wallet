@@ -25,3 +25,6 @@ dist-ssr
 
 # Variables de entorno
 .env
+
+# Test - Vitest UI
+html
