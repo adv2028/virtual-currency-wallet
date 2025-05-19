@@ -8,17 +8,19 @@ type Props = {
     name?: string,
     values?: CurrencyInputOnChangeValues
   ) => void
-  defaultValue?: number
+  defaultValue?: number | null
 }
 
 export const BalanceInput = ({ onValueChange, defaultValue }: Props) => {
+  const internalDefaultValue = defaultValue === null ? undefined : defaultValue;
+
   return (
     <CurrencyInput
       id="balance"
       name="input-balance"
       placeholder="Enter amount"
       allowNegativeValue={false}
-      defaultValue={defaultValue}
+      defaultValue={internalDefaultValue}
       decimalsLimit={2}
       onValueChange={onValueChange}
       prefix="EUR "

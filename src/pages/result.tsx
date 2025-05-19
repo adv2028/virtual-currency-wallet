@@ -4,40 +4,68 @@ import { useLoaderData } from 'react-router'
 
 export const Result = () => {
   const { rates } = useLoaderData()
-  const balance = useStore((state) => state.balance)
+  const balance = useStore((state) => state.balance) ?? 0
   const selectedCurrencies = useStore((state) => state.selectedCurrencies)
   const formattedBalance = formatCurrency({
     value: balance,
     currency: 'EUR',
     locale: 'es-ES',
+    currencyDisplay: 'narrowSymbol',
   })
 
   const calculateExchangeValue = (currency: string) => {
     if (!rates) return
-    const rate = parseInt(rates[currency])
+
+    const rate = parseFloat(rates[currency])
     const exchange = rate * balance
 
     return formatCurrency({
       value: exchange,
       currency,
-      options: { currencySign: 'accounting' },
+      currencyDisplay: 'narrowSymbol',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     })
   }
 
+  const today = new Date()
+
   return (
     <section>
-      <h2 className="text-center font-bold text-3xl pb-5 text-gray-800">
-        {formattedBalance}
-      </h2>
+      <div className="mb-6 pb-4 border-b border-gray-200">
+        <p className="text-lg text-gray-700 text-center">
+          Conversión para:
+          <span className="text-blue-600 font-bold"> EUR</span>
+          <span className="font-semibold text-gray-900">
+            {' '}
+            {formattedBalance}
+          </span>
+        </p>
+      </div>
 
       {selectedCurrencies.map((currency) => (
-        <div key={currency.value} className="grid grid-cols-2 gap-5">
-          <p className="text-gray-800 text-right">
+        <div
+          key={currency.value}
+          className="flex justify-between items-center border-b py-2 last:border-b-0 last:pb-0"
+        >
+          <p className="text-gray-700 font-medium">{currency.value}</p>
+          <p className="text-xl font-bold text-green-600">
             {calculateExchangeValue(currency.value)}
           </p>
-          <p className="text-gray-500">({currency.label})</p>
         </div>
       ))}
+
+      <div className="mt-6 pt-4  border-gray-200 text-center text-sm text-gray-500">
+        Last updated exchange rates:{' '}
+        {Intl.DateTimeFormat('en', {
+          day: '2-digit',
+          dayPeriod: 'long',
+          month: 'long',
+          hour: '2-digit',
+          minute: '2-digit',
+        }).format(today)}
+        .
+      </div>
     </section>
   )
 }
